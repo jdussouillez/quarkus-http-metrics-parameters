@@ -10,13 +10,7 @@ const APIs = [
     {
         url: "http://localhost:8080/hello/greeting/$name",
         method: "GET",
-        values: {
-            "name": generateRandomName
-        }
-    },
-    {
-        url: "http://localhost:8080/hello/greeting/$name",
-        method: "POST",
+        // method: "POST",
         values: {
             "name": generateRandomName
         }
@@ -34,28 +28,22 @@ function random(values) {
     return values[rand(0, values.length)];
 }
 
-function randomStatus() {
-    return Math.random() < 0.5 ? 200 : rand([400, 401, 405, 406]);
-}
-
-function generateUrl(apiDef, status) {
+function generateUrl(apiDef) {
     let url = apiDef.url;
     Object.keys(apiDef.values).forEach(param => {
         const value = apiDef.values[param]();
         url = url.replace(`$${param}`, value);
     });
-    return `${url}?status=${status}`;
+    return url;
 }
 
-async function callApi(apiDef, status) {
-    const url = generateUrl(apiDef, status);
+async function callApi(apiDef) {
+    const url = generateUrl(apiDef);
     const resp = await fetch(url, {method: apiDef.method});
     return resp.ok;
 }
 
 while (true) {
     const apiDef = random(APIs);
-    const status = randomStatus();
-    await callApi(apiDef, status);
-    // await sleep(1000);
+    await callApi(apiDef);
 }
