@@ -144,5 +144,5 @@ while (true) {
     const status = randomStatus();
     const url = generateUrl(apiDef, status);
     await callApi(url);
-    //await sleep(1000);
+    // await sleep(1000);
 }
