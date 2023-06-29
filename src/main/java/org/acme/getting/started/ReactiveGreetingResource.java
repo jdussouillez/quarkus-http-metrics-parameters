@@ -8,9 +8,13 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.time.Duration;
+import java.util.Random;
 
 @Path("/hello")
 public class ReactiveGreetingResource {
+
+    private final Random rand = new Random();
 
     @GET
     @Path("/greeting/{name}")
@@ -18,9 +22,10 @@ public class ReactiveGreetingResource {
     public Uni<Response> greeting(
         @PathParam("name") final String name,
         @QueryParam("status") final int status) {
-        if (status == 200) {
-            return Uni.createFrom().item(Response.ok("Hello " + name).build());
-        }
-        return Uni.createFrom().item(Response.status(status).build());
+        return Uni.createFrom().item(status)
+            .map(s -> s == 200 ? Response.ok("Hello " + name).build() : Response.status(s).build())
+            .onItem()
+            .delayIt()
+            .by(Duration.ofMillis(rand.nextInt(0, 1_000)));
     }
 }
