@@ -44,8 +44,8 @@ async function callApi(apiDef) {
             url,
             {
                 method: apiDef.method,
-                // API can take 1s to respond, so with this timeout we can get "RESET" errors
-                signal: AbortSignal.timeout(800)
+                // API can take 500ms to respond, so with this timeout we can get "RESET" errors
+                signal: AbortSignal.timeout(450)
             }
         );
         return resp.ok;
