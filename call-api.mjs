@@ -2,11 +2,23 @@
 
 $.verbose = false;
 
+function generateRandomName() {
+    return Math.random().toString(36).slice(2, 7);
+}
+
 const APIs = [
     {
         url: "http://localhost:8080/hello/greeting/$name",
+        method: "GET",
         values: {
-            "name": () => Math.random().toString(36).slice(2, 7)
+            "name": generateRandomName
+        }
+    },
+    {
+        url: "http://localhost:8080/hello/greeting/$name",
+        method: "POST",
+        values: {
+            "name": generateRandomName
         }
     }
 ];
@@ -31,16 +43,15 @@ function generateUrl(apiDef, status) {
     return `${url}?status=${status}`;
 }
 
-async function callApi(url) {
-    // console.log(url);
-    const resp = await fetch(url);
+async function callApi(apiDef, status) {
+    const url = generateUrl(apiDef, status);
+    const resp = await fetch(url, {method: apiDef.method});
     return resp.ok;
 }
 
 while (true) {
     const apiDef = random(APIs);
     const status = randomStatus();
-    const url = generateUrl(apiDef, status);
-    await callApi(url);
+    await callApi(apiDef, status);
     // await sleep(1000);
 }

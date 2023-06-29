@@ -2,6 +2,7 @@ package org.acme.getting.started;
 
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -27,5 +28,14 @@ public class ReactiveGreetingResource {
             .onItem()
             .delayIt()
             .by(Duration.ofMillis(rand.nextInt(0, 1_000)));
+    }
+
+    @POST
+    @Path("/greeting/{name}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Uni<Response> postGreeting(
+        @PathParam("name") final String name,
+        @QueryParam("status") final int status) {
+        return greeting(name, status);
     }
 }
