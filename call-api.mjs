@@ -23,15 +23,19 @@ const APIs = [
     }
 ];
 
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function random(values) {
     if (values.length === 1) {
         return values[0];
     }
-    return values[Math.floor(Math.random() * values.length)];
+    return values[rand(0, values.length)];
 }
 
 function randomStatus() {
-    return Math.random() < 0.5 ? 200 : random([401, 405, 406]);
+    return Math.random() < 0.5 ? 200 : rand([400, 401, 405, 406]);
 }
 
 function generateUrl(apiDef, status) {
