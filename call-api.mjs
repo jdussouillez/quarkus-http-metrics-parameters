@@ -39,8 +39,19 @@ function generateUrl(apiDef) {
 
 async function callApi(apiDef) {
     const url = generateUrl(apiDef);
-    const resp = await fetch(url, {method: apiDef.method});
-    return resp.ok;
+    try {
+        const resp = await fetch(
+            url,
+            {
+                method: apiDef.method,
+                // API can take 1s to respond, so with this timeout we can get "RESET" errors
+                signal: AbortSignal.timeout(800)
+            }
+        );
+        return resp.ok;
+    } catch (e) {
+    }
+    return false;
 }
 
 while (true) {

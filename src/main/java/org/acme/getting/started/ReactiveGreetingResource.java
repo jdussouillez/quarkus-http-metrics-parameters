@@ -21,6 +21,6 @@ public class ReactiveGreetingResource {
         return Uni.createFrom().item("Hello " + name)
             .onItem()
             .delayIt()
-            .by(Duration.ofMillis(rand.nextInt(0, 500)));
+            .by(Duration.ofMillis(rand.nextInt(0, 1_000)));
     }
 }
