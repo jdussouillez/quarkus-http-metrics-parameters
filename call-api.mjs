@@ -8,7 +8,7 @@ function generateRandomName() {
 
 const APIs = [
     {
-        url: "http://localhost:8080/hello/greeting/$name",
+        url: "http://localhost:8080/api/hello/greeting/$name",
         method: "GET",
         // method: "POST",
         values: {
